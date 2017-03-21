@@ -1,16 +1,15 @@
 from app import app
-"""
-@app.route('/')
-@app.route('/index')
-def index():
-    return "Hello, World!"
-"""
+from flask import  render_template,make_response
 from flask_restful import Resource, Api
+from app import models
+
 api = Api(app)
 
 class HelloWorld(Resource):
     def get(self):
-        return {'hello': 'world'}
+        queryset = models.Table3.query.all()
+        return make_response(render_template('base.html', details = queryset),200)
+
 
 api.add_resource(HelloWorld, '/')
 

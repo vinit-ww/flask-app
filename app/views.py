@@ -4,6 +4,7 @@ from flask_restful import Resource, Api
 from app import models
 from flask_jwt import JWT, jwt_required, current_identity
 from werkzeug.security import safe_str_cmp
+from datetime import timedelta
 
 api = Api(app)
 
@@ -34,8 +35,8 @@ def identity(payload):
     return userid_table.get(user_id, None)
 
 app.config['SECRET_KEY'] = 'super-secret'
-jwt = JWT(app, authenticate, identity)
-
+app.config['JWT_EXPIRATION_DELTA']=timedelta(seconds=30)
+jwt = JWT(app, authenticate, identity) 
 class HelloWorld(Resource):
     decorators = [jwt_required()]
     def get(self):
